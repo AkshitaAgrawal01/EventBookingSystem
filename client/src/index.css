@@ -1,0 +1,186 @@
+:root {
+  --ink: #24201A;
+  --plum: #3F2548;
+  --indigo: #35369C;
+  --lavender: #7C679E;
+  --cream: #C8C793;
+  --danger: #E58C8C;
+  --muted: color-mix(in srgb, var(--cream) 65%, var(--ink));
+  --line: rgba(200, 199, 147, 0.18);
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--ink); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--cream);
+}
+
+/* The glow: grain on top, then four soft blobs of colour */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.09'/></svg>"),
+    radial-gradient(34rem 26rem at 14% 4%, rgba(200, 199, 147, 0.30), transparent 70%),
+    radial-gradient(60rem 48rem at 88% 42%, rgba(53, 54, 156, 0.80), transparent 65%),
+    radial-gradient(46rem 36rem at 8% 88%, rgba(63, 37, 72, 0.95), transparent 70%),
+    radial-gradient(30rem 24rem at 70% 100%, rgba(124, 103, 158, 0.45), transparent 70%);
+}
+
+/* Type */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.6rem;
+}
+h1 { font-size: clamp(2.1rem, 5.5vw, 3.4rem); }
+h2 { font-size: 1.4rem; }
+p { margin: 0 0 0.6rem; max-width: 65ch; }
+.muted { color: var(--muted); }
+.error { color: var(--danger); }
+.price { font-family: var(--font-display); font-size: 1.5rem; }
+
+a {
+  color: var(--cream);
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(200, 199, 147, 0.4);
+}
+a:hover { text-decoration-color: var(--cream); }
+:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
+
+/* Layout */
+.page { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+.stack { display: grid; gap: 1rem; margin-top: 1.5rem; max-width: 720px; }
+.narrow { max-width: 520px; margin: 3rem auto; }
+.detail { max-width: 720px; margin: 0 auto; }
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0.5rem 0 0.9rem;
+}
+
+/* Glass surfaces */
+.card, form {
+  background: linear-gradient(150deg, rgba(200, 199, 147, 0.11), rgba(124, 103, 158, 0.07));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 1.5rem;
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(200, 199, 147, 0.14);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, form { background: rgba(63, 37, 72, 0.88); }
+}
+
+form { display: grid; gap: 0.9rem; max-width: 480px; margin: 3rem auto; padding: 2rem; }
+form h1 { font-size: 2rem; margin-bottom: 0.4rem; }
+
+/* Inputs */
+input, textarea, select {
+  width: 100%;
+  font: inherit;
+  color: var(--cream);
+  background: rgba(36, 32, 26, 0.55);
+  border: 1px solid rgba(124, 103, 158, 0.55);
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+}
+input::placeholder, textarea::placeholder {
+  color: color-mix(in srgb, var(--cream) 60%, transparent);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--cream);
+  box-shadow: 0 0 0 3px rgba(200, 199, 147, 0.2);
+}
+textarea { min-height: 110px; resize: vertical; }
+.detail input[type="number"] { width: 7rem; }
+
+/* Buttons */
+button, .btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  color: var(--cream);
+  background: var(--indigo);
+  border: 1px solid rgba(124, 103, 158, 0.7);
+  border-radius: 999px;
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+button:hover:not(:disabled), .btn:hover {
+  background: color-mix(in srgb, var(--indigo) 65%, var(--lavender));
+  border-color: var(--cream);
+}
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Navbar */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.85rem 1.5rem;
+  background: rgba(36, 32, 26, 0.55);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  text-decoration: none;
+}
+.nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem; }
+.nav button { background: transparent; padding: 0.4rem 1rem; }
+
+/* Booking status */
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--lavender);
+}
+.badge.paid { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+.badge.cancelled, .badge.failed { border-color: var(--danger); color: var(--danger); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
