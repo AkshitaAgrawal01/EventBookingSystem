@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { getMyBookings, createCheckoutSession } from "../api/bookingService";
+import { Link } from "react-router-dom";
+import { formatDate, cancelReasonText } from "../utils/bookingText";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -24,6 +26,14 @@ function MyBookings() {
     fetchBookings();
   }, []);
 
+  useEffect(() => {
+  const handlePageShow = (e) => {
+    if (e.persisted) setPayingId(null);
+  };
+  window.addEventListener("pageshow", handlePageShow);
+  return () => window.removeEventListener("pageshow", handlePageShow);
+}, []);
+
   const handlePayNow = async (bookingId) => {
     setPayingId(bookingId);
     setError("");
@@ -46,20 +56,31 @@ return (
 
     <div className="stack">
       {bookings.map((booking) => (
-        <article className="card" key={booking._id}>
+        <article className={`card booking-card status-${booking.status}`} key={booking._id}>
           <div className="row">
-            <h2>{booking.event?.title || "Event no longer available"}</h2>
+            <h2>
+              <Link className="stretched" to={`/my-bookings/${booking._id}`}>
+                {booking.event?.title || "Event no longer available"}
+              </Link>
+            </h2>
             <strong className={`badge ${booking.status}`}>{booking.status}</strong>
           </div>
+
           {booking.event && (
             <p className="muted">
-              {booking.event.venue}, {new Date(booking.event.date).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}
+              {booking.event.venue}, {formatDate(booking.event.date)}
             </p>
           )}
+
           <p>
             {booking.quantity} {booking.quantity === 1 ? "ticket" : "tickets"}
             {booking.event && `, ₹${booking.event.price * booking.quantity} total`}
           </p>
+
+          {booking.status === "cancelled" && (
+            <p className="note bad">{cancelReasonText(booking)}</p>
+          )}
+
           {booking.status === "pending" && (
             <button
               onClick={() => handlePayNow(booking._id)}
@@ -72,6 +93,7 @@ return (
       ))}
     </div>
   </div>
-);}
+);
+}
 
 export default MyBookings;

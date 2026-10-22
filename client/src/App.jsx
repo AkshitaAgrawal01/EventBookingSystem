@@ -9,6 +9,7 @@ import CreateEvent from "./pages/CreateEvent";
 import BookingSuccess from "./pages/BookingSuccess";
 import BookingCancelled from "./pages/BookingCancelled";
 import ProtectedRoute from "./components/ProtectedRoute";
+import BookingDetails from "./pages/BookingDetails";
 
 import { useAuth } from "./context/AuthContext";
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/booking-success" element={<ProtectedRoute><BookingSuccess /></ProtectedRoute>}/>
         <Route path="/booking-cancelled" element={<ProtectedRoute><BookingCancelled /></ProtectedRoute>}/>
         <Route path="/my-bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>}/>
+        <Route path="/my-bookings/:id" element={<ProtectedRoute><BookingDetails /></ProtectedRoute>}/>
         <Route path="/create-event" element={<ProtectedRoute role="organizer"><CreateEvent /></ProtectedRoute>}/>
       </Routes>
       </main>

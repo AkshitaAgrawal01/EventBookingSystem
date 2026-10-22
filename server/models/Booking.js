@@ -7,6 +7,8 @@ const bookingSchema = new mongoose.Schema({
   status: { type: String, enum: ["pending", "paid", "cancelled", "failed"], default: "pending" },
   stripeSessionId: { type: String },
   expiresAt: { type: Date, required: true },
+  cancelReason: { type: String, enum: ["expired"] },
+  cancelledAt: { type: Date },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Booking", bookingSchema);

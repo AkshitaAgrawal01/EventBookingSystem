@@ -22,9 +22,9 @@ const releaseExpiredBookings = async () => {
       }
 
       const claimed = await Booking.findOneAndUpdate(
-        { _id: booking._id, status: "pending" },
-        { status: "cancelled" }
-      );
+  { _id: booking._id, status: "pending" },
+  { status: "cancelled", cancelReason: "expired", cancelledAt: new Date() }
+);
 
       if (!claimed) continue;
 

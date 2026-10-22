@@ -20,7 +20,13 @@ function Navbar() {
         <>
           <Link to="/my-bookings">My bookings</Link>
           {user.role === "organizer" && <Link to="/create-event">Create event</Link>}
-          <span className="muted">{user.name}</span>
+          <span className="user-chip">
+  <span className="avatar" aria-hidden="true">{user.name.charAt(0).toUpperCase()}</span>
+  <span>
+    {user.name}
+    <small className="muted">{user.role === "organizer" ? "Organizer" : "Attendee"}</small>
+  </span>
+</span>
           <button onClick={handleLogout}>Log out</button>
         </>
       ) : (

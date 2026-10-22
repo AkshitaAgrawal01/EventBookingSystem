@@ -14,3 +14,8 @@ export const getMyBookings = async () => {
   const response = await axiosInstance.get("/bookings/my-bookings");
   return response.data;
 };
+
+export const getBookingById = async (id) => {
+  const response = await axiosInstance.get(`/bookings/${id}`);
+  return response.data;
+};

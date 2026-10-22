@@ -2,10 +2,18 @@
 const Booking = require("../models/Booking");
 const Event = require("../models/Event");
 const stripe = require("../config/stripe");
+const mongoose = require("mongoose");
 
 const createBooking = async (req, res) => {
   try {
     const { eventId, quantity } = req.body;
+    const event = await Event.findById(eventId).select("organizer");
+if (!event) {
+  return res.status(404).json({ message: "Event not found" });
+}
+if (event.organizer.toString() === req.user.userId) {
+  return res.status(403).json({ message: "You can't book tickets for your own event" });
+}
 
     // Atomically check AND decrement in one step — prevents overselling
     const updatedEvent = await Event.findOneAndUpdate(
@@ -87,4 +95,27 @@ const createCheckoutSession = async (req, res) => {
   }
 };
 
-module.exports = { createBooking, getMyBookings, createCheckoutSession };
+const getBookingById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    const booking = await Booking.findById(id).populate({
+      path: "event",
+      populate: { path: "organizer", select: "name" },
+    });
+
+    if (!booking || booking.user.toString() !== req.user.userId) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json(booking);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { createBooking, getMyBookings, createCheckoutSession, getBookingById };

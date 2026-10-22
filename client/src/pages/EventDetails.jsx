@@ -30,6 +30,13 @@ function EventDetails() {
     };
     fetchEvent();
   }, [id]);
+  useEffect(() => {
+  const handlePageShow = (e) => {
+    if (e.persisted) setSubmitting(false);
+  };
+  window.addEventListener("pageshow", handlePageShow);
+  return () => window.removeEventListener("pageshow", handlePageShow);
+}, []);
 
   const handleBook = async () => {
     if (!user) {
@@ -59,6 +66,8 @@ function EventDetails() {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   const soldOut = event.ticketsRemaining === 0;
+  // add below: const soldOut = event.ticketsRemaining === 0;
+const isOwnEvent = user && event.organizer?._id === user.id;
 
 return (
   <div className="card detail">
@@ -77,25 +86,29 @@ return (
       </span>
     </div>
 
-    {!soldOut && (
-      <>
-        <label>
-          Tickets
-          <input
-            type="number"
-            min="1"
-            max={event.ticketsRemaining}
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-          />
-        </label>
-        <p>Total: ₹{event.price * quantity}</p>
-        {bookingError && <p className="error">{bookingError}</p>}
-        <button onClick={handleBook} disabled={submitting}>
-          {submitting ? "Redirecting to payment..." : "Book now"}
-        </button>
-      </>
-    )}
+    {isOwnEvent ? (
+  <p className="note">You're organizing this event, so you can't book tickets for it.</p>
+) : (
+  !soldOut && (
+    <>
+      <label>
+        Tickets
+        <input
+          type="number"
+          min="1"
+          max={event.ticketsRemaining}
+          value={quantity}
+          onChange={(e) => setQuantity(Number(e.target.value))}
+        />
+      </label>
+      <p>Total: ₹{event.price * quantity}</p>
+      {bookingError && <p className="error">{bookingError}</p>}
+      <button onClick={handleBook} disabled={submitting}>
+        {submitting ? "Redirecting to payment..." : "Book now"}
+      </button>
+    </>
+  )
+)}
   </div>
 );
 }

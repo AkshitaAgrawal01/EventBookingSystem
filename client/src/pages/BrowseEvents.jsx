@@ -36,9 +36,8 @@ function BrowseEvents() {
         <article className="card" key={event._id}>
           <h2>{event.title}</h2>
           <p className="muted">{event.venue}</p>
-          <p className="muted">
-            {new Date(event.date).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}
-          </p>
+          <p className="muted">{new Date(event.date).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
+          <p className="muted">Organized by {event.organizer?.name}</p>
           <div className="row">
             <span className="price">₹{event.price}</span>
             <span className="muted">

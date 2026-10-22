@@ -184,3 +184,46 @@ label {
   font-weight: 500;
   font-size: 0.95rem;
 }
+/* User chip */
+.user-chip { display: flex; align-items: center; gap: 0.6rem; line-height: 1.2; }
+.user-chip small { display: block; font-size: 0.78rem; }
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--indigo);
+  border: 1px solid rgba(124, 103, 158, 0.7);
+  font-weight: 600;
+}
+
+/* Booking cards: whole card is clickable */
+.booking-card { position: relative; }
+.booking-card h2 a { text-decoration: none; }
+.booking-card .stretched::after { content: ""; position: absolute; inset: 0; border-radius: 22px; }
+.booking-card button { position: relative; z-index: 1; }
+.booking-card:has(.stretched:focus-visible) { outline: 2px solid var(--cream); outline-offset: 3px; }
+
+/* Card look by status */
+.card.status-paid {
+  border-color: rgba(200, 199, 147, 0.45);
+  background: linear-gradient(150deg, rgba(200, 199, 147, 0.2), rgba(53, 54, 156, 0.14));
+}
+.card.status-pending {
+  border-color: rgba(124, 103, 158, 0.75);
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.65), 0 0 36px -8px rgba(53, 54, 156, 0.7);
+}
+.card.status-cancelled, .card.status-failed {
+  border-color: rgba(229, 140, 140, 0.35);
+  background: linear-gradient(150deg, rgba(229, 140, 140, 0.08), rgba(36, 32, 26, 0.45));
+}
+
+/* Notes and detail layout */
+.note { border-left: 2px solid var(--lavender); padding-left: 0.85rem; margin: 0.75rem 0; }
+.note.bad { border-left-color: var(--danger); }
+.note.good { border-left-color: var(--cream); }
+dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.45rem 1.5rem; margin: 1.25rem 0; }
+dl.facts dt { color: var(--muted); }
+dl.facts dd { margin: 0; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin-top: 1.25rem; }
